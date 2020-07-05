@@ -5,45 +5,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include<graphics.h>
-#include<dos.h>
 using namespace std;
-
-void ClearScreen()
-  {
-  HANDLE                     hStdOut;
-  CONSOLE_SCREEN_BUFFER_INFO csbi;
-  DWORD                      count;
-  DWORD                      cellCount;
-  COORD                      homeCoords = { 0, 0 };
-
-  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-  if (hStdOut == INVALID_HANDLE_VALUE) return;
-
-  /* Get the number of cells in the current buffer */
-  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
-  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
-
-  /* Fill the entire buffer with spaces */
-  if (!FillConsoleOutputCharacter(
-    hStdOut,
-    (TCHAR) ' ',
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  /* Fill the entire buffer with the current colors and attributes */
-  if (!FillConsoleOutputAttribute(
-    hStdOut,
-    csbi.wAttributes,
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  /* Move the cursor home */
-  SetConsoleCursorPosition( hStdOut, homeCoords );
-  }
 
 class game
 {
@@ -602,7 +564,7 @@ void game::Levels() //Just minimize this function
     break;
 
     default:
-        ClearScreen();
+        cls();
         std::cout << "CONGRULATIONS ";
         Sleep(5000);
         }
@@ -617,7 +579,7 @@ void game::LevelMenu()
 {
     cout <<"CONTROLS: > ^ < for moving and  1 / 2  for shooting...";
     Sleep(4500);
-    ClearScreen();
+    cls();
     system("color d5");
     sp(481);
     std::cout << "CHOOSE YOUR LEVEL:";
@@ -805,13 +767,13 @@ void game::graphics()
 
 void game::gameover()
 {
-    ClearScreen();
+    cls();
     std::cout <<"GG,YOU'VE JUST LOSE!";
     std::cout <<"You scored " << points << " points\n";
     Sleep(2000);
     std::cout <<"Restarting...";
     Sleep(2000);
-    ClearScreen();
+    cls();
     system("color c5");
     sp(481);
     LevelMenu();
