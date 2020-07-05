@@ -2,14 +2,53 @@
 #include <conio.h>
 #include <windows.h>
 #include <ctime>
-#include <graphics.h>
+#include <bits/stdc++.h>
 #include <vector>
+#include<graphics.h>
+#include<dos.h>
 using namespace std;
+
+void ClearScreen()
+  {
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  /* Get the number of cells in the current buffer */
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  /* Fill the entire buffer with spaces */
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  /* Fill the entire buffer with the current colors and attributes */
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  /* Move the cursor home */
+  SetConsoleCursorPosition( hStdOut, homeCoords );
+  }
 
 class game
 {
 private:
-    std::vector <int> fake;
+    vector <int> fake;
     char map[1800];
     int x;//COORDINATES
     int c;
@@ -563,7 +602,7 @@ void game::Levels() //Just minimize this function
     break;
 
     default:
-        system("cls");
+        ClearScreen();
         std::cout << "CONGRULATIONS ";
         Sleep(5000);
         }
@@ -576,9 +615,9 @@ void sp(int spalva)
 }
 void game::LevelMenu()
 {
-    std::cout <<"CONTROLS: > ^ < for moving and  1 / 2  for shooting...";
+    cout <<"CONTROLS: > ^ < for moving and  1 / 2  for shooting...";
     Sleep(4500);
-    system("cls");
+    ClearScreen();
     system("color d5");
     sp(481);
     std::cout << "CHOOSE YOUR LEVEL:";
@@ -766,13 +805,13 @@ void game::graphics()
 
 void game::gameover()
 {
-    system("cls");
+    ClearScreen();
     std::cout <<"GG,YOU'VE JUST LOSE!";
     std::cout <<"You scored " << points << " points\n";
     Sleep(2000);
     std::cout <<"Restarting...";
     Sleep(2000);
-    system("cls");
+    ClearScreen();
     system("color c5");
     sp(481);
     LevelMenu();
@@ -839,7 +878,7 @@ int main()
 {
     system("color c5");
     sp(481);
-    srand((unsigned)time(0));
+    srand((unsigned)time(0)); // if rand is used then it will give same sequence of numbers but srand will make sure that it will generate different value on every call but if srand(1) is there then there will be no change in sequence
     game *memb;
     memb = new game;
     memb->LevelMenu();
