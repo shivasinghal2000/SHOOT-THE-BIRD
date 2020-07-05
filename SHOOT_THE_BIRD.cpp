@@ -7,6 +7,43 @@
 #include<graphics.h>
 using namespace std;
 
+void ClearScreen()
+  {
+  HANDLE                     hStdOut;
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+  DWORD                      count;
+  DWORD                      cellCount;
+  COORD                      homeCoords = { 0, 0 };
+
+  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
+  if (hStdOut == INVALID_HANDLE_VALUE) return;
+
+  /* Get the number of cells in the current buffer */
+  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
+  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
+
+  /* Fill the entire buffer with spaces */
+  if (!FillConsoleOutputCharacter(
+    hStdOut,
+    (TCHAR) ' ',
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  /* Fill the entire buffer with the current colors and attributes */
+  if (!FillConsoleOutputAttribute(
+    hStdOut,
+    csbi.wAttributes,
+    cellCount,
+    homeCoords,
+    &count
+    )) return;
+
+  /* Move the cursor home */
+  SetConsoleCursorPosition( hStdOut, homeCoords );
+  }
+
 class game
 {
 private:
@@ -45,45 +82,6 @@ void cls()
     Position.Y = 0;
     SetConsoleCursorPosition(hOut, Position);
 }
-
-// clearScreen() and cls() both functions do the same work so anyone of them can be used
-void ClearScreen()
-  {
-  HANDLE                     hStdOut;
-  CONSOLE_SCREEN_BUFFER_INFO csbi;
-  DWORD                      count;
-  DWORD                      cellCount;
-  COORD                      homeCoords = { 0, 0 };
-
-  hStdOut = GetStdHandle( STD_OUTPUT_HANDLE );
-  if (hStdOut == INVALID_HANDLE_VALUE) return;
-
-  /* Get the number of cells in the current buffer */
-  if (!GetConsoleScreenBufferInfo( hStdOut, &csbi )) return;
-  cellCount = csbi.dwSize.X *csbi.dwSize.Y;
-
-  /* Fill the entire buffer with spaces */
-  if (!FillConsoleOutputCharacter(
-    hStdOut,
-    (TCHAR) ' ',
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  /* Fill the entire buffer with the current colors and attributes */
-  if (!FillConsoleOutputAttribute(
-    hStdOut,
-    csbi.wAttributes,
-    cellCount,
-    homeCoords,
-    &count
-    )) return;
-
-  /* Move the cursor home */
-  SetConsoleCursorPosition( hStdOut, homeCoords );
-  }
-
 void game::Levels() //Just minimize this function
 ////////////////////////////////////////////////////////////////////////////*//
 {
@@ -604,7 +602,7 @@ void game::Levels() //Just minimize this function
 
     default:
         cls();
-        std::cout << "CONGRULATIONS ";
+         cout << "CONGRULATIONS ";
         Sleep(5000);
         }
 PrepareGraphics();
@@ -621,23 +619,23 @@ void game::LevelMenu()
     cls();
     system("color d5");
     sp(481);
-    std::cout << "CHOOSE YOUR LEVEL:";
-    std::cout<<"\n";
-    std::cout <<"1." << std::endl;
-    std::cout <<"2." << std::endl;
-    std::cout <<"3." << std::endl;
-    std::cout <<"4." << std::endl;
-    std::cout <<"5." << std::endl;
-    std::cout <<"6." << std::endl;
-    std::cout <<"7." << std::endl;
-    std::cout <<"8." << std::endl;
-    std::cout <<"9." << std::endl;
-    std::cout <<"10."<< std::endl;
-    std::cout <<"11."<< std::endl;
+      cout << "CHOOSE YOUR LEVEL:";
+      cout<<"\n";
+      cout <<"1." <<   endl;
+      cout <<"2." <<   endl;
+      cout <<"3." <<   endl;
+      cout <<"4." <<   endl;
+      cout <<"5." <<   endl;
+    cout <<"6." << endl;
+    cout <<"7." << endl;
+    cout <<"8." << endl;
+    cout <<"9." << endl;
+    cout <<"10."<< endl;
+    cout <<"11."<< endl;
     int y;
     while(y > 12 || y < 1)
     {
-        std::cin >> y;
+        cin >> y;
     }
     if(y == 1)
     {
@@ -694,7 +692,7 @@ void game::LevelMenu()
         CurrentLevel = 11;
         speed = 28;
     }
-    std::cout << "GET READY.";
+    cout << "GET READY.";
     Sleep(2500);
     Levels();
 }
@@ -718,21 +716,21 @@ void game::graphics()
     if(c == 40)
     {
         CurrentLevel++;
-        std::cout << "Congrulations,you have passed this level\n,let's try another one!";
+        cout << "Congrulations,you have passed this level\n,let's try another one!";
         Sleep(4000);
         Levels();
     }
-    std::cout << std::endl;
+    cout << endl;
     for(int k = 0;k < 40;k++ )
     {
-        std::cout << char(219);
+        cout << char(219);
     }
-    std::cout << std::endl;
+    cout << endl;
     for(int u = 0;u < 1800;u++)
     {
         if(u!= 0 && u % 40 == 0)
         {
-            std::cout << std::endl;
+            cout << endl;
         }
         /////////////////////////////////////
         /////////////////////////////////////
@@ -784,7 +782,7 @@ void game::graphics()
             }
         };
         check = 0;
-        std::cout << map[u];
+        cout << map[u];
     }
     for(int h = 1760;h < 1800;h++)
     {
@@ -794,23 +792,23 @@ void game::graphics()
         }
     }
     fake.clear();
-    std::cout << std::endl;
+    cout << endl;
     for(int k = 0;k < 40;k++ )
     {
-        std::cout << char(219);
+        cout << char(219);
     }
-    std::cout << std::endl;
-    std::cout << "\n\n\n\n            Points:" << points;
+    cout << endl;
+    cout << "\n\n\n\n            Points:" << points;
     LOGIC();
 }
 
 void game::gameover()
 {
     cls();
-    std::cout <<"GG,YOU'VE JUST LOSE!";
-    std::cout <<"You scored " << points << " points\n";
+    cout <<"GG,YOU'VE JUST LOSE!";
+    cout <<"You scored " << points << " points\n";
     Sleep(2000);
-    std::cout <<"Restarting...";
+      cout <<"Restarting...";
     Sleep(2000);
     cls();
     system("color c5");
